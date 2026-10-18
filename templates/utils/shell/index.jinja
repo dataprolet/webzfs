@@ -6,9 +6,10 @@
 
 {% block head_assets %}
 {% if not cockpit_context and allowed %}
-<link rel="stylesheet" href="{{ url_for('static', path='vendor/xterm/xterm.css') }}">
-<script src="{{ url_for('static', path='vendor/xterm/xterm.js') }}"></script>
-<script src="{{ url_for('static', path='vendor/xterm/addon-fit.js') }}"></script>
+{# Root-relative paths so the assets load over the page's own scheme behind an HTTPS reverse proxy (issue 245). #}
+<link rel="stylesheet" href="{{ request.app.url_path_for('static', path='vendor/xterm/xterm.css') }}">
+<script src="{{ request.app.url_path_for('static', path='vendor/xterm/xterm.js') }}"></script>
+<script src="{{ request.app.url_path_for('static', path='vendor/xterm/addon-fit.js') }}"></script>
 {% endif %}
 {% endblock %}
 
@@ -116,6 +117,6 @@
     "recording": recording_enabled,
     "socketPath": "/utils/shell/terminal"
 } | tojson }}</script>
-<script src="{{ url_for('static', path='js/terminal/shell-terminal.js') }}"></script>
+<script src="{{ request.app.url_path_for('static', path='js/terminal/shell-terminal.js') }}"></script>
 {% endif %}
 {% endblock %}
