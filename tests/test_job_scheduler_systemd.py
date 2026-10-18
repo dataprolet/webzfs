@@ -199,6 +199,14 @@ def test_policy_has_no_embedded_argument_wildcards():
     assert "/usr/bin/crontab" not in policy
 
 
+def test_policy_ends_with_line_terminator():
+    # sudo-rs visudo rejects a sudoers file without a final newline (issue 255).
+    policy = (
+        Path(__file__).resolve().parents[1] / "sudoers.d" / "webzfs.linux"
+    ).read_bytes()
+    assert policy.endswith(b"\n")
+
+
 def test_updater_migrates_only_recognized_legacy_pairs(tmp_path):
     script = (Path(__file__).resolve().parents[1] / "update_linux.sh").read_text()
     migration = script.split("migrate_legacy_units() {", 1)[1].split(
