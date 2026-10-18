@@ -207,8 +207,10 @@ echo
 # smartmontools - SMART disk monitoring
 # sanoid - ZFS snapshot management (includes syncoid for replication)
 # libsodium - runtime dependency of pynacl (used by paramiko for SSH)
+# bash - shell prerequisite (not part of the FreeBSD base system)
+# rsync - file synchronization prerequisite (not part of the FreeBSD base system)
 # Note: rust, gmake are NOT needed when using pre-compiled wheels
-pkg install -y python312 py312-pip node npm smartmontools sanoid libsodium expat
+pkg install -y python312 py312-pip node npm smartmontools sanoid libsodium expat bash rsync
 
 if [ $? -ne 0 ]; then
     printf "${RED}Error: Failed to install required packages${NC}\n"
@@ -268,6 +270,14 @@ if ! command_exists rsync; then
 fi
 
 printf "${GREEN}✓${NC} rsync found\n"
+
+if ! command_exists bash; then
+    printf "${RED}Error: bash was not installed correctly${NC}\n"
+    echo "Install it with: pkg install bash"
+    exit 1
+fi
+
+printf "${GREEN}✓${NC} bash found\n"
 
 # Check for ZFS (should be built-in on FreeBSD)
 if ! command_exists zpool || ! command_exists zfs; then
